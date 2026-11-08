@@ -129,7 +129,6 @@ UTS-Deep-Learning-2026/
 ├── README.md
 ├── .gitignore
 ├── requirements.txt
-│
 ├── UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb
 │
 └── dataset/
@@ -140,34 +139,47 @@ UTS-Deep-Learning-2026/
 
 ## How to Run
 
-### 1. Clone the Repository
+### Option 1: Google Colab
+
+Open the notebook directly using the following link:
+
+[Open Notebook in Google Colab](https://colab.research.google.com/github/ariprimm/UTS-Deep-Learning-2026/blob/main/UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb)
+
+In a new Colab runtime, run the following commands in the first code cell to clone the repository and access the dataset:
+
+```python
+!git clone https://github.com/ariprimm/UTS-Deep-Learning-2026.git
+%cd /content/UTS-Deep-Learning-2026
+```
+
+After cloning, execute the notebook cells sequentially.
+
+### Option 2: Local Environment
+
+**1. Clone the Repository**
 
 ```bash
 git clone https://github.com/ariprimm/UTS-Deep-Learning-2026.git
 cd UTS-Deep-Learning-2026
 ```
 
-### 2. Install Dependencies
+**2. Install Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Open the Notebook
-
-Open the notebook using Jupyter Notebook or Google Colab:
-
-`UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb`
-
-You can also open it directly in Google Colab:
-
-[Open Notebook in Google Colab](https://colab.research.google.com/github/ariprimm/UTS-Deep-Learning-2026/blob/main/UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb)
-
-### 4. Prepare the Dataset
+**3. Prepare the Dataset**
 
 Ensure that all three TSV files are available inside the `dataset/` directory.
 
-### 5. Run the Notebook
+**4. Open the Notebook**
+
+Open the following file using Jupyter Notebook:
+
+`UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb`
+
+**5. Run the Notebook**
 
 Execute all notebook cells sequentially to perform:
 
