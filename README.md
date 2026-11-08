@@ -23,6 +23,7 @@ The project covers dataset exploration, text preprocessing, vocabulary construct
 | Student ID | 202432107 |
 | Class | C |
 | Institution | Institut Teknologi PLN |
+| Study Program | Information Systems |
 | Course | Deep Learning |
 | Algorithm | Long Short-Term Memory (LSTM) |
 | Framework | PyTorch |
@@ -32,15 +33,21 @@ The project covers dataset exploration, text preprocessing, vocabulary construct
 
 **Dataset for Indonesian Sentiment Analysis**
 
-- Kaggle Owner: Alvin Kurniawan Hanafie
+- Dataset Owner: Alvin Kurniawan Hanafie
 - Source: [Kaggle Dataset](https://www.kaggle.com/datasets/alvinhanafie/dataset-for-indonesian-sentiment-analysis)
 - Language: Indonesian
 - Classes: Positive, Negative, Neutral
 - License displayed on Kaggle: Apache 2.0
 
-The dataset contains training, validation, and masked-label test files.
+### Dataset Files
 
-The masked-label file contains 500 texts without usable ground-truth sentiment labels and is therefore used for inference only.
+| File | Description |
+|---|---|
+| `train_preprocess_ori.tsv` | Original labeled training data |
+| `valid_preprocess.tsv` | Original labeled validation data |
+| `test_preprocess_masked_label.tsv` | 500 unlabeled texts for inference |
+
+The masked-label file does not contain usable ground-truth sentiment labels. Therefore, it is used for prediction only, not model evaluation.
 
 ## Model Architecture
 
@@ -48,7 +55,7 @@ The implemented architecture consists of:
 
 `Embedding → LSTM → Dropout → Fully Connected → Classification`
 
-Main configuration:
+### Hyperparameters
 
 | Hyperparameter | Value |
 |---|---:|
@@ -61,10 +68,12 @@ Main configuration:
 | Optimizer | Adam |
 | Loss Function | Weighted CrossEntropyLoss |
 | Early Stopping Patience | 3 |
+| Gradient Clipping | 1.0 |
+| Random Seed | 42 |
 
 ## Experimental Results
 
-Evaluation was performed using 1,260 labeled records from the original validation file.
+The model achieved the following results using 1,260 labeled records from the original validation dataset.
 
 | Metric | Result |
 |---|---:|
@@ -74,60 +83,79 @@ Evaluation was performed using 1,260 labeled records from the original validatio
 | Best Epoch | 4 |
 | Best Validation Loss | 0.4370 |
 
-The evaluation results represent performance on the labeled validation data, not the official masked Kaggle test set.
+Training was stopped at epoch 7 through early stopping, while the best model weights were obtained at epoch 4.
+
+**Evaluation Note:** These metrics represent evaluation on the original labeled validation file, not the official Kaggle masked test set.
 
 ## Repository Structure
 
 ```text
 UTS-Deep-Learning-2026/
+│
 ├── README.md
-├── UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb
-├── dataset/
-│   ├── train_preprocess_ori.tsv
-│   ├── valid_preprocess.tsv
-│   └── test_preprocess_masked_label.tsv
-├── report/
-│   └── UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.pdf
+├── .gitignore
 ├── requirements.txt
-└── .gitignore
+│
+├── UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb
+│
+└── dataset/
+    ├── train_preprocess_ori.tsv
+    ├── valid_preprocess.tsv
+    └── test_preprocess_masked_label.tsv
 ```
 
 ## How to Run
 
-1. Clone this repository:
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/ariprimm/UTS-Deep-Learning-2026.git
+cd UTS-Deep-Learning-2026
 ```
 
-2. Install the required libraries:
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Open the notebook using Google Colab or Jupyter Notebook.
+### 3. Open the Notebook
 
-4. Ensure all three dataset files are placed inside the `dataset/` directory.
+Open the notebook using Google Colab or Jupyter Notebook:
 
-5. Run the notebook cells sequentially.
+`UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb`
 
-The notebook includes data inspection, preprocessing, model training, evaluation, and prediction on unlabeled texts.
+### 4. Prepare the Dataset
+
+Ensure that all three TSV files are available inside the `dataset/` directory.
+
+### 5. Run the Notebook
+
+Execute the notebook cells sequentially to perform:
+
+- Dataset inspection
+- Text preprocessing
+- Tokenization and vocabulary construction
+- Sequence encoding and padding
+- LSTM model training
+- Model evaluation
+- Sentiment prediction on unlabeled data
 
 ## Dataset Attribution
 
 Dataset source:
 
-Alvin Kurniawan Hanafie — Dataset for Indonesian Sentiment Analysis.
+**Alvin Kurniawan Hanafie — Dataset for Indonesian Sentiment Analysis**
 
 https://www.kaggle.com/datasets/alvinhanafie/dataset-for-indonesian-sentiment-analysis
 
-Please refer to the original Kaggle dataset page for its license and attribution requirements.
+Please refer to the original Kaggle dataset page for the complete license terms and attribution requirements.
 
 ## Author
 
 **Arif Prima Rahadian**  
+Information Systems  
 Institut Teknologi PLN  
-Information Systems — Class C
+Class C — 2026
 
 Individual academic project for the Deep Learning course.
