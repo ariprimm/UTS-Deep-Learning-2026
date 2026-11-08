@@ -33,63 +33,69 @@ The project covers dataset exploration, text preprocessing, vocabulary construct
 
 **Dataset for Indonesian Sentiment Analysis**
 
-- Dataset owner: Alvin Kurniawan Hanafie (`alvinhanafie`)
+- Dataset Owner: Alvin Kurniawan Hanafie (`alvinhanafie`)
 - Source: [Kaggle — Dataset for Indonesian Sentiment Analysis](https://www.kaggle.com/datasets/alvinhanafie/dataset-for-indonesian-sentiment-analysis)
 - Language: Indonesian
-- Sentiment classes: Negative, Neutral, Positive
-- License shown on Kaggle: Apache 2.0
+- Sentiment Classes: Negative, Neutral, Positive
+- License displayed on Kaggle: Apache 2.0
 
 ### Dataset Files
 
-| File | Initial rows | Role in this project |
+| File | Initial Rows | Role in This Project |
 |---|---:|---|
-| `train_preprocess_ori.tsv` | 11,000 | Labeled source data used to create the training and internal validation subsets |
-| `valid_preprocess.tsv` | 1,260 | Labeled evaluation data, kept separate from model training and checkpoint selection |
-| `test_preprocess_masked_label.tsv` | 500 | Unlabeled texts used for inference only |
+| `train_preprocess_ori.tsv` | 11,000 | Labeled source data for training and internal validation |
+| `valid_preprocess.tsv` | 1,260 | Separate labeled evaluation data |
+| `test_preprocess_masked_label.tsv` | 500 | Unlabeled texts used for inference |
 
-The dataset contains two columns: `text` (the Indonesian text) and `sentiment` (the sentiment label). The masked-label file contains placeholder values rather than usable ground-truth labels; therefore, it is not used to calculate evaluation metrics.
+The dataset contains two columns: `text` (Indonesian text) and `sentiment` (sentiment label).
+
+The masked-label file contains placeholder values rather than usable ground-truth labels. Therefore, it is used for inference only and not for calculating evaluation metrics.
 
 ### Data Preparation
 
-The original training file contained 11,000 rows. Preprocessing removed 67 duplicate texts and 14 texts that overlapped with the labeled evaluation file, leaving 10,919 records. This pool was split using a stratified 90:10 split:
+The original training file contained 11,000 rows. Preprocessing removed 67 duplicate texts and 14 texts that overlapped with the labeled evaluation file, leaving 10,919 records.
+
+This remaining data was divided using a stratified 90:10 split:
 
 - Training subset: 9,827 records
 - Internal validation subset: 1,092 records
 - Separate labeled evaluation file: 1,260 records
 - Unlabeled inference file: 500 records
 
-The vocabulary was built from the training subset only. Sequences were padded or truncated to 80 tokens.
+The vocabulary was built using the training subset only. Sequences were padded or truncated to a maximum length of 80 tokens.
 
 ## Model Architecture
 
-The implemented architecture is:
+The implemented architecture consists of:
 
 `Embedding → LSTM → Dropout → Fully Connected → 3-class Classification`
 
-The model uses a single-layer, unidirectional LSTM. The final hidden state is passed through dropout and a fully connected layer to produce logits for the three sentiment classes.
+The model uses a single-layer, unidirectional LSTM. The final hidden state is passed through dropout and a fully connected layer to produce classification logits for the three sentiment categories.
 
 ### Hyperparameters
 
 | Hyperparameter | Value |
 |---|---:|
-| Vocabulary size | 8,492 |
-| Embedding dimension | 128 |
-| Hidden size | 128 |
-| LSTM layers | 1 |
+| Vocabulary Size | 8,492 |
+| Embedding Dimension | 128 |
+| Hidden Size | 128 |
+| LSTM Layers | 1 |
 | Dropout | 0.5 |
-| Maximum sequence length | 80 tokens |
-| Batch size | 64 |
-| Learning rate | 0.001 |
-| Maximum epochs | 15 |
+| Maximum Sequence Length | 80 tokens |
+| Batch Size | 64 |
+| Learning Rate | 0.001 |
+| Maximum Epochs | 15 |
 | Optimizer | Adam |
-| Loss function | Weighted CrossEntropyLoss |
-| Early stopping patience | 3 |
-| Gradient clipping | 1.0 |
-| Random seed | 42 |
+| Loss Function | Weighted CrossEntropyLoss |
+| Early Stopping Patience | 3 |
+| Gradient Clipping | 1.0 |
+| Random Seed | 42 |
 
 ## Experimental Results
 
-The model was evaluated on the 1,260 labeled records from `valid_preprocess.tsv`. This is a separate labeled evaluation file; it is not the official masked Kaggle test set.
+The model was evaluated using 1,260 labeled records from `valid_preprocess.tsv`. This file was kept separate from model training and checkpoint selection.
+
+### Overall Performance
 
 | Metric | Result |
 |---|---:|
@@ -99,7 +105,7 @@ The model was evaluated on the 1,260 labeled records from `valid_preprocess.tsv`
 | Macro F1-Score | 0.8241 |
 | Weighted F1-Score | 0.8630 |
 | Best Epoch | 4 |
-| Best Validation Loss | 0.4375 |
+| Best Internal Validation Loss | 0.4375 |
 
 ### F1-Score by Class
 
@@ -109,7 +115,11 @@ The model was evaluated on the 1,260 labeled records from `valid_preprocess.tsv`
 | Neutral | 0.7475 |
 | Positive | 0.9087 |
 
-Training stopped at epoch 7 through early stopping. The checkpoint with the lowest internal validation loss was selected from epoch 4. The rising validation loss after epoch 4 indicates a degree of overfitting during later epochs.
+Training stopped at epoch 7 through early stopping. The model checkpoint with the lowest internal validation loss was selected from epoch 4.
+
+The increase in validation loss after epoch 4 indicates a degree of overfitting during the later training epochs.
+
+**Evaluation Note:** These metrics represent evaluation on the separate labeled validation file, not the official masked Kaggle test set.
 
 ## Repository Structure
 
@@ -119,6 +129,7 @@ UTS-Deep-Learning-2026/
 ├── README.md
 ├── .gitignore
 ├── requirements.txt
+│
 ├── UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb
 │
 └── dataset/
@@ -144,7 +155,9 @@ pip install -r requirements.txt
 
 ### 3. Open the Notebook
 
-Open `UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb` in Jupyter Notebook or Google Colab.
+Open the notebook using Jupyter Notebook or Google Colab:
+
+`UTS_DEEPL_C_202432107_ARIFPRIMARAHADIAN.ipynb`
 
 You can also open it directly in Google Colab:
 
@@ -152,19 +165,30 @@ You can also open it directly in Google Colab:
 
 ### 4. Prepare the Dataset
 
-Keep all three TSV files inside the `dataset/` directory. The notebook searches the working directory and the `dataset/` directory for these files.
+Ensure that all three TSV files are available inside the `dataset/` directory.
 
 ### 5. Run the Notebook
 
-Execute the cells sequentially to perform dataset inspection, preprocessing, tokenization, vocabulary construction, sequence encoding, LSTM training, evaluation, and inference on unlabeled texts.
+Execute all notebook cells sequentially to perform:
+
+- Dataset inspection
+- Text preprocessing
+- Tokenization and vocabulary construction
+- Sequence encoding and padding
+- LSTM model training
+- Model evaluation
+- Sentiment prediction on unlabeled texts
 
 ## Dataset Attribution
 
-Dataset: **Dataset for Indonesian Sentiment Analysis** by Alvin Kurniawan Hanafie (`alvinhanafie`).
+**Dataset:** Dataset for Indonesian Sentiment Analysis  
+**Owner:** Alvin Kurniawan Hanafie (`alvinhanafie`)
 
-Original source: [Kaggle dataset page](https://www.kaggle.com/datasets/alvinhanafie/dataset-for-indonesian-sentiment-analysis)
+Original source:
 
-The Kaggle page displays the Apache 2.0 license. Refer to the original dataset page for the applicable license terms and attribution requirements.
+https://www.kaggle.com/datasets/alvinhanafie/dataset-for-indonesian-sentiment-analysis
+
+The Kaggle page displays the Apache 2.0 license. Please refer to the original dataset page for the applicable license terms and attribution requirements.
 
 ## Author
 
